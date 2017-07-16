@@ -17,8 +17,10 @@
 		* @var string Hostname of the FileMaker Server as evaluated from the Resource Owner's User Agent.
 		*/
 		public $fileMakerServerHostname;
+		const STORAGEFOLDERPATH = '../Storage/';
 		
 		function __construct($fileMakerServerHostname = '') {
+			if ( $fileMakerServerHostname == '') $fileMakerServerHostname = $_SERVER['SERVER_NAME'];
 			$this->fileMakerServerHostname = $fileMakerServerHostname;
 		}
 		
@@ -80,6 +82,8 @@
 			$end = strpos($output, "\r", $start ) ;
 			$length = $end - $start;
 			$requestId = substr($output, $start, $length) ;
+			// Store Request Id for later usage
+			$this->StoreRequestId($requestId) ;
 			
 			$startAuthURL = strpos($output, 'https://',0);
 			$endAuthURL = strlen($output);
@@ -89,8 +93,56 @@
 			return $authURLnew;
 		}
 		
+	
 		/**
-		* Gets Request ID. This is later used together with the Identifier returned afther Authentication grant to log in into the FileMaker database
+		* Returns a list of configured OAuth Providers as an associative array with Provider name as key and an array of details as value. The link key can be used for login buttons
+		*
+		* @return string OAuth Provider authentication URL (used for the authorisation request)
+		*/
+		public function ListProviders()  {
+			$url = "https://" . $this->fileMakerServerHostname . "/fmws/oauthproviderinfo";
+	
+			$ch = curl_init($url);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			$output = curl_exec($ch) ;
+			curl_close($ch) ;
+			//print_r($output);
+			
+			$arrJSONProviders = json_decode ( $output , true);
+			if(!count($arrJSONProviders)) return false ;
+			
+			foreach($arrJSONProviders['data']['Provider'] as $arrProviderDetails) {
+				$providerName = $arrProviderDetails['Name'] ; 
+				$arrProviders[$providerName]['link'] = "../OAuthDispatcher.php?action=GetRequestId&provider=". $providerName ;
+			}
+			
+			return $arrProviders;
+			
+		}
+		
+		/**
+		 * Returns HTML with login buttons for the configured OAuth Providers
+		 * 
+		 * @return string
+		 */
+		public function ListProvidersHTML() {
+			$arrProviders = $this->ListProviders() ;
+			if(!$arrProviders) return "No OAuth Providers are configured." ;
+			
+			//print_r ( $arrProviders);
+			
+			$html = '';
+			foreach($arrProviders as $providerName=>$arrProviderDetails) {
+				$html .= "<a href='../OAuthConnector/OAuthDispatcher.php?action=GetRequestId&provider=". $providerName . "'>
+						<img src='../OAuthConnector/Resources/" . $providerName . ".png' style='width: 156px; height: 38px' /></a><br />";
+			}
+			
+			return $html ;
+		}
+		
+		
+		/**
+		* Redirects to the OAuth Provider's authorization and authentication pages.
 		*
 		* @param string URL to redirect for the grant request from the Resource Owner that authorize/authenticate FileMaker Server and your web application.
 		*/
@@ -103,29 +155,29 @@
 			curl_close($ch) ;
 		}
 		
+		
 		/**
-		* Gets Request ID. This is later used together with the Identifier returned afther Authentication grant to log in into the FileMaker database
+		* Put Request Id in storage . Adapt this code if using other storage types.
 		*
-		* @param string returnURL URL that FileMaker Server redirects to after the OAuth Provider send the Authorization grant code to FileMaker Server
-		* @param string provider Name of the OAuth Provider. The OAuth Provder MUST have been configured in FileMaker Server, i.a. a client id and secret must be registered.
-		* @param string trackingID Optional trackingID
-		*
-		* @return string OAuth Provider authentication URL (used for the authorisation request)
+		* @return boolean result
 		*/
-		public function ListProviders()  {
-			$url = "https://" . $this->fileMakerServerHostname . "/fmws/oauthproviderinfo";
-	
-			$ch = curl_init($url);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-			$output = curl_exec($ch) ;
-			curl_close($ch) ;
-			
-			//print_r($output);
-			
-			$arrProviders = json_decode ( $output , true);
-			
-			return $arrProviders;
-			
+		public function StoreRequestId($requestId)  {
+			$file = fopen(self::STORAGEFOLDERPATH . 'RequestId.txt','w');
+			$result = fwrite($file, $requestId);
+			fclose($file);
+			return $result;
+		}
+		
+		/**
+		* Put Identifier in storage. Adapt this code if using other storage types.
+		*
+		* @return boolean result
+		*/
+		public function StoreIdentifier($identifier)  {
+			$file = fopen(self::STORAGEFOLDERPATH . 'Identifier.txt','w');
+			$result = fwrite($file, $identifier);
+			fclose($file);
+			return $result;	
 		}
 		
 		
