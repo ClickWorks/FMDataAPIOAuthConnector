@@ -8,7 +8,7 @@
 	
 	// Get Request Id from storage, assumed that this is handled by the oAuthConnector scripts first
 	$objFMDataAPIOAuthConnector = new FMDataAPIOAuthConnector();
-	$objFMDataAPIOAuthConnector->SetApplicationCallbackURL('http://yourserver.yourdomain.org/FMDataAPIOAuthConnector/Example/GetCompaniesList.php') ;
+	$objFMDataAPIOAuthConnector->SetApplicationCallbackURL('https://yourserver.yourdomain.org/FMDataAPIOAuthConnector/Example/GetCompaniesList.php') ;
 	
 	$providerButtonsHTML = $objFMDataAPIOAuthConnector->ListProvidersHTML();
 	// Alternatively, call ListProviders() to obtain an associative array of configured OAuth Providers with the Provider name as a key and the URL link as a value
