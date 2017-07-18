@@ -2,6 +2,7 @@
 OAuth Connector for the FileMaker Data API.$
 
 INTRODUCTION
+
 The FMDataAPIOAuthConnector handles the OAuth authentication process when using the FileMaker Data API, which is a RESTful API. Specifically, it retrieves RequestId and Identifier necessary for an OAuth Login call. 
 
 After retrieval of these 2 pieces of information, your PHP application has all that is necessary to do the actual login request and obtain an Access Token from FileMaker Server. Please refer to the FileMaker Data API reference documentation on how to to perform that call. 
