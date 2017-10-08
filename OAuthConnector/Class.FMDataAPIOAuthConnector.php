@@ -133,8 +133,8 @@
 			
 			$html = '';
 			foreach($arrProviders as $providerName=>$arrProviderDetails) {
-				$html .= "<a href='../OAuthConnector/OAuthDispatcher.php?action=GetRequestId&provider=". $providerName . "'>
-						<img src='../OAuthConnector/Resources/" . $providerName . ".png' style='width: 156px; height: 38px' /></a><br />";
+				$html .= "<div><a href='../OAuthConnector/OAuthDispatcher.php?action=GetRequestId&provider=". $providerName . "'>
+						<img src='../OAuthConnector/Resources/" . $providerName . ".png' style='' /><div> $providerName</div></a></div>";
 			}
 			
 			return $html ;
