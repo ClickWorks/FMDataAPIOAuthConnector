@@ -29,18 +29,31 @@
 					font-family: Helvetica, Arial;
 				}
 				div.button-links {
-					width: 100%; display: block; text-align:center; 
+					margin-left: auto; margin-right: auto; display: block; width: 400px;
 				}
-				.buttonlinks a{
-					text-decoration: none;
+				
+				div.button-links div {
+					margin: 4px 0px; padding: 4px 4px; border: 1px solid #999999; 
+				}
+				
+				.button-links img {
+					margin-left: auto; margin-right: auto; display: block;
+				}
+				.button-links div div {
+					margin-top: 10px;  vertical-align: top; border: none;
+				}
+				
+				
+				.button-links div a {  
+					   color: black; text-decoration: none; text-align: center;vertical-align:top;
 				}
 			</style>
 			<title>List Of OAuth Providers</title>
 		</head>
 		<body>
 			<h1>Please log in</h1>
-			<div class="button-links">
+			<div class="button-links" align="center">
 				<?php echo $providerButtonsHTML; ?>
-			<div>
+			</div>
 		</body>
 	</html>
