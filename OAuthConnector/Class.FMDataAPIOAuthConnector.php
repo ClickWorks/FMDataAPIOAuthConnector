@@ -59,7 +59,7 @@
 		public function GetRequestId($returnURL,$provider='',$trackingID='')  {
 			
 			$server = $this->fileMakerServerHostname;
-			$url = "http://" . $server . "/oauth/getoauthurl?trackingID=" . $trackingID . "&provider=" . $provider  ."&address=" . $server . "&X-FMS-OAuth-AuthType=2";
+			$url = "https://" . $server . "/oauth/getoauthurl?trackingID=" . $trackingID . "&provider=" . $provider  ."&address=" . $server . "&X-FMS-OAuth-AuthType=2";
 			$arrHeaders = array(
 					'X-FMS-Application-Type:9', 
 					'X-FMS-Application-Version:15', 
