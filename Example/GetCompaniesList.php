@@ -1,4 +1,8 @@
-<?php
+<html>
+<head>
+<title>Companies List</title>
+</head>
+<body><?php
 
 	/*
 	* RETRIEVE REQUESTID AND IDENTIFIER NECESSARY TO RETRIEVE AN ACCESS TOKEN.
@@ -37,7 +41,7 @@
 	$accessToken = $arrResponse['token'];
 	
 	//--  Get data
-	$url = "https://" . $server . "/fmi/rest/api/record/YourDatabase/YourLayout";
+	$url = "https://" . $server . "/fmi/rest/api/record/Companies/Companies";
 	
 	$ch = curl_init($url);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type:application/json','FM-Data-Token:' . $accessToken)) ;
@@ -46,4 +50,26 @@
 	$output = curl_exec($ch) ;
 	
 	// Display the raw JSON output
+	echo "<h1>Raw output</h1>" ;
 	print_r($output);
+	echo  "<br /><br />\r\n" ;
+	$objOutput = json_decode ( $output) ;
+	$objData = $objOutput->data ;
+	
+
+	
+	//print_r($objData) ; exit();
+	echo "<h1>Formatted output</h1>" ;
+	
+	foreach ( $objData as $record ) {
+		
+		foreach ( $record->fieldData as $field=>$value) {
+			echo $field . ": " . $value . "<br />\r\n" ;
+		}
+		
+		echo  "<hr /><br />\r\n" ;
+	}
+	
+	
+?>
+</body>
