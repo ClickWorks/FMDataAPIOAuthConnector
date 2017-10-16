@@ -148,11 +148,7 @@
 		*/
 		public function AuthenticateWithOAuthProvider($authURL)  {
 			//echo $authURL; exit();
-			$ch = curl_init($authURL);
-			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);
-			$output = curl_exec($ch) ;
-			curl_close($ch) ;
+			header('Location:' . $authURL);
 		}
 		
 		
