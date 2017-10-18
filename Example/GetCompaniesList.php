@@ -38,6 +38,11 @@
 	
 	// Parse the response and fetch the Access Token. Some error handling would be a great idea!
 	$arrResponse = json_decode ($output, true) ;
+	
+	if($arrResponse['errorCode'] !== 0)  {
+		echo "User authentication failed. Error code: " . $arrResponse['errorCode'];
+		exit();
+	}
 	$accessToken = $arrResponse['token'];
 	
 	//--  Get data
